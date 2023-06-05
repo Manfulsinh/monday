@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Todo List</title>
+</head>
+<body>
+    <div class="main">
+        <h2 class="hp">Todo List</h2>
+        <form name="toDoList">
+            <input type="text" name="ListItem" placeholder="Enter a task"/>
+            <button id="button">Add</button>
+        </form>
+        <ol></ol>
+    </div>
+
+    <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/script.js"></script>
+
+<script>
+
+      
+$(document).ready(function(){
+    var storedItems = JSON.parse(localStorage.getItem('toDoItems')) || [];
+
+    function saveToLocalStorage() {
+        localStorage.setItem('toDoItems', JSON.stringify(storedItems));
+    }
+
+    function renderList() {
+        $('ol').empty();
+        storedItems.forEach(function(item) {
+            $('ol').append('<li>' + item + '<i class="fa-solid fa-trash"></i></li>');
+        });
+    }
+
+    function clearInputField() {
+        $('input[name=ListItem]').val('');
+    }
+
+    $('#button').click(function(){
+        var toAdd = $('input[name=ListItem]').val();
+        storedItems.push(toAdd);
+        saveToLocalStorage();
+        renderList();
+        clearInputField();
+    });
+
+    $('ol').on('click', '.fa-trash', function(){
+        var itemIndex = $(this).parent('li').index();
+        storedItems.splice(itemIndex, 1);
+        saveToLocalStorage();
+        renderList();
+    });
+
+    $('ol').on('click', 'li', function(e) {
+        if (!$(e.target).hasClass('fa-trash')) {
+            clearInputField();
+        }
+    });
+
+    renderList();
+
+    let btnclear = document.querySelector('button');
+    let input = document.querySelectorAll('input');
+
+    btnclear.addEventListener('click', () => {
+     input.forEach(input => input.value = '');
+  });
+
+    
+});
+</script>
+
+</body>
+</html>
