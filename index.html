@@ -21,9 +21,8 @@
 
     <script src="js/jquery-3.6.1.min.js"></script>
     <script src="js/script.js"></script>
-
     <script>
-        $(document).ready(function(){
+        document.addEventListener('DOMContentLoaded', function() {
             var storedItems = JSON.parse(localStorage.getItem('toDoItems')) || [];
 
             function saveToLocalStorage() {
@@ -43,12 +42,19 @@
                 $('input[name=ListItem]').val('');
             }
 
-             $('#button').click(function(){
-                 var toAdd = $('input[name=ListItem]').val();
-                 storedItems.push({ task: toAdd, done: false });
-                 saveToLocalStorage();
-                 renderList();
-                 clearInputField();
+            $('#button').click(function(){
+                var toAdd = $('input[name=ListItem]').val();
+                storedItems.push({ task: toAdd, done: false });
+                saveToLocalStorage();
+                renderList();
+                clearInputField();
+            });
+
+            $('ol').on('click', 'input[type=checkbox]', function(){
+                var itemIndex = $(this).closest('li').index();
+                storedItems[itemIndex].done = $(this).is(':checked');
+                saveToLocalStorage();
+                renderList();
             });
 
             $('ol').on('click', '.fa-trash', function(){
@@ -58,12 +64,7 @@
                 renderList();
             });
 
-           
-           
-
             renderList();
-
-          
         });
     </script>
 </body>
